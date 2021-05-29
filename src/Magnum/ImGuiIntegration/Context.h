@@ -4,7 +4,7 @@
     This file is part of Magnum.
 
     Copyright © 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
-                2020 Vladimír Vondruš <mosra@centrum.cz>
+                2020, 2021 Vladimír Vondruš <mosra@centrum.cz>
     Copyright © 2018 ShaddyAQN <ShaddyAQN@gmail.com>
     Copyright © 2018 Tomáš Skřivan <skrivantomas@seznam.cz>
     Copyright © 2018 Jonathan Hale <squareys@googlemail.com>
@@ -38,7 +38,7 @@
 #include <Magnum/GL/Texture.h>
 #include <Magnum/GL/Buffer.h>
 #include <Magnum/GL/Mesh.h>
-#include <Magnum/Shaders/Flat.h>
+#include <Magnum/Shaders/FlatGL.h>
 
 #include "Magnum/ImGuiIntegration/visibility.h"
 
@@ -540,7 +540,7 @@ class MAGNUM_IMGUIINTEGRATION_EXPORT Context {
 
     private:
         ImGuiContext* _context;
-        Shaders::Flat2D _shader;
+        Shaders::FlatGL2D _shader;
         GL::Texture2D _texture{NoCreate};
         GL::Buffer _vertexBuffer{GL::Buffer::TargetHint::Array};
         GL::Buffer _indexBuffer{GL::Buffer::TargetHint::ElementArray};

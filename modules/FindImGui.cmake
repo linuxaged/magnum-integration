@@ -36,7 +36,7 @@
 #   This file is part of Magnum.
 #
 #   Copyright © 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
-#               2020 Vladimír Vondruš <mosra@centrum.cz>
+#               2020, 2021 Vladimír Vondruš <mosra@centrum.cz>
 #   Copyright © 2018 Jonathan Hale <squareys@googlemail.com>
 #
 #   Permission is hereby granted, free of charge, to any person obtaining a
@@ -154,13 +154,32 @@ foreach(_component IN LISTS ImGui_FIND_COMPONENTS)
                 # toolchains.
                 find_file(ImGui_${_file}_SOURCE NAMES ${_file}.cpp
                     HINTS ${IMGUI_DIR} NO_CMAKE_FIND_ROOT_PATH)
-                list(APPEND ImGui_SOURCES ${ImGui_${_file}_SOURCE})
 
                 if(NOT ImGui_${_file}_SOURCE)
                     set(ImGui_Sources_FOUND FALSE)
                     break()
                 endif()
 
+                list(APPEND ImGui_SOURCES ${ImGui_${_file}_SOURCE})
+                _imgui_setup_source_file(ImGui_${_file}_SOURCE)
+            endforeach()
+
+            # Files not present in all ImGui versions, treat them as optional
+            # and do nothing if not found.
+            # - imgui_tables added in https://github.com/ocornut/imgui/commit/9874077fc0e364383ef997e3d4332172bfddc0b9
+            foreach(_file imgui_tables)
+                # Disable the find root path here, it overrides the
+                # CMAKE_FIND_ROOT_PATH_MODE_INCLUDE setting potentially set in
+                # toolchains.
+                find_file(ImGui_${_file}_SOURCE NAMES ${_file}.cpp
+                    HINTS ${IMGUI_DIR} NO_CMAKE_FIND_ROOT_PATH)
+
+                if(NOT ImGui_${_file}_SOURCE)
+                    mark_as_advanced(ImGui_${_file}_SOURCE)
+                    continue()
+                endif()
+
+                list(APPEND ImGui_SOURCES ${ImGui_${_file}_SOURCE})
                 _imgui_setup_source_file(ImGui_${_file}_SOURCE)
             endforeach()
 

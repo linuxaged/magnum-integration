@@ -4,7 +4,7 @@
     This file is part of Magnum.
 
     Copyright © 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
-                2020 Vladimír Vondruš <mosra@centrum.cz>
+                2020, 2021 Vladimír Vondruš <mosra@centrum.cz>
     Copyright © 2013 Jan Dupal <dupal.j@gmail.com>
     Copyright © 2016 Jonathan Hale <squareys@googlemail.com>
     Copyright © 2019 Max Schwarz <max.schwarz@online.de>
@@ -69,7 +69,7 @@ transform directly on the @cpp btRigidBody @ce:
 
 @snippet BulletIntegration.cpp MotionState-update
 
-Keep in mind that hanges to a rigid body using
+Keep in mind that changes to a rigid body using
 @cpp btRigidBody::setWorldTransform() @ce may only update the motion state of
 non-static objects and while @cpp btDynamicsWorld::stepSimulation() @ce is
 called.
@@ -91,11 +91,23 @@ class MAGNUM_BULLETINTEGRATION_EXPORT MotionState: public SceneGraph::AbstractBa
         /** @brief Motion state */
         btMotionState& btMotionState() { return *this; }
 
+    protected:
+        /**
+         * @brief Get world transformation
+         *
+         * Updates @p worldTrans with relative object rotation and translation.
+         */
+        void getWorldTransform(btTransform& worldTrans) const override;
+
+        /**
+         * @brief Set world transformation
+         *
+         * Updates object translation and rotation with @p worldTrans.
+         */
+        void setWorldTransform(const btTransform& worldTrans) override;
+
     private:
         explicit MotionState(SceneGraph::AbstractBasicObject3D<btScalar>& object, SceneGraph::AbstractBasicTranslationRotation3D<btScalar>& transformation);
-
-        void MAGNUM_BULLETINTEGRATION_LOCAL getWorldTransform(btTransform& worldTrans) const override;
-        void MAGNUM_BULLETINTEGRATION_LOCAL setWorldTransform(const btTransform& worldTrans) override;
 
         SceneGraph::AbstractBasicTranslationRotation3D<btScalar>& _transformation;
         bool _broken{false};

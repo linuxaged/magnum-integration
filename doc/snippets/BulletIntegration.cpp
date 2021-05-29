@@ -2,7 +2,7 @@
     This file is part of Magnum.
 
     Copyright © 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
-                2020 Vladimír Vondruš <mosra@centrum.cz>
+                2020, 2021 Vladimír Vondruš <mosra@centrum.cz>
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -60,6 +60,7 @@ btWorld->debugDrawWorld();
 #pragma GCC diagnostic pop
 #endif
 
+#ifndef BT_USE_DOUBLE_PRECISION
 {
 /* [Integration] */
 btVector3 a{20.0f, 50.0f, -1.0f};
@@ -71,7 +72,9 @@ auto c = btQuaternion(Quaternion::rotation(15.0_degf, Vector3::xAxis()));
 static_cast<void>(b);
 static_cast<void>(c);
 }
+#endif
 
+#ifndef BT_USE_DOUBLE_PRECISION
 {
 #ifdef __clang__
 #pragma GCC diagnostic push
@@ -106,4 +109,5 @@ rigidBody->setMotionState(&motionState->btMotionState());
 #pragma GCC diagnostic pop
 #endif
 }
+#endif
 }

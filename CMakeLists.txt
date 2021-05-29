@@ -2,7 +2,7 @@
 #   This file is part of Magnum.
 #
 #   Copyright © 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
-#               2020 Vladimír Vondruš <mosra@centrum.cz>
+#               2020, 2021 Vladimír Vondruš <mosra@centrum.cz>
 #   Copyright © 2018 Konstantinos Chatzilygeroudis <costashatz@gmail.com>
 #   Copyright © 2018 Jonathan Hale <squareys@googlemail.com>
 #   Copyright © 2019 bowling-allie <allie.smith.epic@gmail.com>
@@ -27,6 +27,12 @@
 #
 
 cmake_minimum_required(VERSION 3.4)
+
+# If CMAKE_AUTOMOC is set, all uses of corrade_add_resource() would otherwise
+# complain on 3.10 that AUTOMOC is not processing GENERATED files
+if(POLICY CMP0071)
+    cmake_policy(SET CMP0071 NEW)
+endif()
 
 project(MagnumIntegration CXX)
 

@@ -2,7 +2,7 @@
     This file is part of Magnum.
 
     Copyright © 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
-                2020 Vladimír Vondruš <mosra@centrum.cz>
+                2020, 2021 Vladimír Vondruš <mosra@centrum.cz>
     Copyright © 2018, 2019 Konstantinos Chatzilygeroudis <costashatz@gmail.com>
 
     Permission is hereby granted, free of charge, to any person obtaining a
@@ -84,6 +84,9 @@ struct ConvertShapeNodeTest: TestSuite::Tester {
     void urdf();
     void multiMesh();
     void texture();
+
+    private:
+        PluginManager::Manager<Trade::AbstractImporter> _manager;
 };
 
 ConvertShapeNodeTest::ConvertShapeNodeTest() {
@@ -187,8 +190,7 @@ void ConvertShapeNodeTest::assimpImporter() {
         CORRADE_VERIFY(!shapeDataAll);
     } {
         /* load AssimpImporter */
-        PluginManager::Manager<Trade::AbstractImporter> manager{MAGNUM_PLUGINS_IMPORTER_DIR};
-        Containers::Pointer<Trade::AbstractImporter> importer = manager.loadAndInstantiate("AssimpImporter");
+        Containers::Pointer<Trade::AbstractImporter> importer = _manager.loadAndInstantiate("AssimpImporter");
         CORRADE_VERIFY(importer);
         /* MeshShape */
         dart::dynamics::SkeletonPtr tmpSkel = dart::dynamics::Skeleton::create("MeshShape");
@@ -210,8 +212,7 @@ void ConvertShapeNodeTest::assimpImporter() {
     dart::io::DartLoader loader;
     #endif
     {
-        PluginManager::Manager<Trade::AbstractImporter> manager{MAGNUM_PLUGINS_IMPORTER_DIR};
-        Containers::Pointer<Trade::AbstractImporter> importer = manager.loadAndInstantiate("AssimpImporter");
+        Containers::Pointer<Trade::AbstractImporter> importer = _manager.loadAndInstantiate("AssimpImporter");
         CORRADE_VERIFY(importer);
 
         const std::string filename = Utility::Directory::join(DARTINTEGRATION_TEST_DIR, "urdf/test.urdf");
@@ -228,8 +229,7 @@ void ConvertShapeNodeTest::assimpImporter() {
         auto shapeDataAll = convertShapeNode(*shapeNode, ConvertShapeType::All, importer.get());
         CORRADE_VERIFY(!shapeDataAll);
     } {
-        PluginManager::Manager<Trade::AbstractImporter> manager{MAGNUM_PLUGINS_IMPORTER_DIR};
-        Containers::Pointer<Trade::AbstractImporter> importer = manager.loadAndInstantiate("AssimpImporter");
+        Containers::Pointer<Trade::AbstractImporter> importer = _manager.loadAndInstantiate("AssimpImporter");
         CORRADE_VERIFY(importer);
 
         const std::string filename = Utility::Directory::join(DARTINTEGRATION_TEST_DIR, "urdf/test.urdf");
@@ -396,8 +396,7 @@ void ConvertShapeNodeTest::urdf() {
     dart::io::DartLoader loader;
     #endif
 
-    PluginManager::Manager<Trade::AbstractImporter> manager{MAGNUM_PLUGINS_IMPORTER_DIR};
-    Containers::Pointer<Trade::AbstractImporter> importer = manager.loadAndInstantiate("AssimpImporter");
+    Containers::Pointer<Trade::AbstractImporter> importer = _manager.loadAndInstantiate("AssimpImporter");
     CORRADE_VERIFY(importer);
 
     const UnsignedInt assimpVersion = aiGetVersionMajor()*100 + aiGetVersionMinor();
@@ -470,8 +469,7 @@ void ConvertShapeNodeTest::multiMesh() {
     dart::io::DartLoader loader;
     #endif
 
-    PluginManager::Manager<Trade::AbstractImporter> manager{MAGNUM_PLUGINS_IMPORTER_DIR};
-    Containers::Pointer<Trade::AbstractImporter> importer = manager.loadAndInstantiate("AssimpImporter");
+    Containers::Pointer<Trade::AbstractImporter> importer = _manager.loadAndInstantiate("AssimpImporter");
     CORRADE_VERIFY(importer);
 
     const std::string filename = Utility::Directory::join(DARTINTEGRATION_TEST_DIR, "urdf/test_multi_mesh.urdf");
@@ -522,8 +520,7 @@ void ConvertShapeNodeTest::texture() {
     dart::io::DartLoader loader;
     #endif
 
-    PluginManager::Manager<Trade::AbstractImporter> manager{MAGNUM_PLUGINS_IMPORTER_DIR};
-    Containers::Pointer<Trade::AbstractImporter> importer = manager.loadAndInstantiate("AssimpImporter");
+    Containers::Pointer<Trade::AbstractImporter> importer = _manager.loadAndInstantiate("AssimpImporter");
     CORRADE_VERIFY(importer);
 
     const std::string filename = Utility::Directory::join(DARTINTEGRATION_TEST_DIR, "urdf/test_texture.urdf");

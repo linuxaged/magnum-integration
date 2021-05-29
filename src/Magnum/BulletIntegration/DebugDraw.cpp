@@ -2,7 +2,7 @@
     This file is part of Magnum.
 
     Copyright © 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
-                2020 Vladimír Vondruš <mosra@centrum.cz>
+                2020, 2021 Vladimír Vondruš <mosra@centrum.cz>
     Copyright © 2016 Jonathan Hale <squareys@googlemail.com>
 
     Permission is hereby granted, free of charge, to any person obtaining a
@@ -64,7 +64,7 @@ Debug& operator<<(Debug& debug, const DebugDraw::Mode value) {
 }
 
 DebugDraw::DebugDraw(const std::size_t initialBufferCapacity): _mesh{GL::MeshPrimitive::Lines} {
-    _mesh.addVertexBuffer(_buffer, 0, Shaders::VertexColor3D::Position{}, Shaders::VertexColor3D::Color3{});
+    _mesh.addVertexBuffer(_buffer, 0, Shaders::VertexColorGL3D::Position{}, Shaders::VertexColorGL3D::Color3{});
     arrayReserve(_bufferData, initialBufferCapacity*4);
 }
 
@@ -90,8 +90,10 @@ void DebugDraw::drawLine(const btVector3& from, const btVector3& to, const btVec
 
 void DebugDraw::drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor) {
     arrayAppend(_bufferData, {
-        Vector3{from}, Vector3{fromColor},
-        Vector3{to}, Vector3{toColor}});
+        Vector3{Math::Vector3<btScalar>{from}},
+        Vector3{Math::Vector3<btScalar>{fromColor}},
+        Vector3{Math::Vector3<btScalar>{to}},
+        Vector3{Math::Vector3<btScalar>{toColor}}});
 
     /* The flushLines() API was added at some point between 2.83 and 2.83.4,
        but that's below the resolution of the constant below. Moreover, 284

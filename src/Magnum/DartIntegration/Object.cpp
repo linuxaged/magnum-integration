@@ -2,7 +2,7 @@
     This file is part of Magnum.
 
     Copyright © 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
-                2020 Vladimír Vondruš <mosra@centrum.cz>
+                2020, 2021 Vladimír Vondruš <mosra@centrum.cz>
     Copyright © 2018, 2019 Konstantinos Chatzilygeroudis <costashatz@gmail.com>
 
     Permission is hereby granted, free of charge, to any person obtaining a
@@ -165,7 +165,7 @@ bool Object::extractDrawData(Trade::AbstractImporter* importer) {
 
     /* Get meshes */
     if(loadType & ConvertShapeType::Mesh) {
-        _drawData->meshes = Containers::Array<GL::Mesh>(Containers::NoInit, shapeData->meshes.size());
+        _drawData->meshes = Containers::Array<GL::Mesh>(NoInit, shapeData->meshes.size());
         for(UnsignedInt i = 0; i < shapeData->meshes.size(); i++)
             new(&_drawData->meshes[i]) GL::Mesh{MeshTools::compile(shapeData->meshes[i])};
     }

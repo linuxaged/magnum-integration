@@ -2,7 +2,7 @@
     This file is part of Magnum.
 
     Copyright © 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
-                2020 Vladimír Vondruš <mosra@centrum.cz>
+                2020, 2021 Vladimír Vondruš <mosra@centrum.cz>
     Copyright © 2013 Jan Dupal <dupal.j@gmail.com>
 
     Permission is hereby granted, free of charge, to any person obtaining a
@@ -31,6 +31,10 @@
 
 #include "Magnum/BulletIntegration/Integration.h"
 
+#ifdef BT_USE_DOUBLE_PRECISION
+#include <Magnum/SceneGraph/AbstractFeature.hpp>
+#endif
+
 namespace Magnum { namespace BulletIntegration {
 
 /* The original btMotionState is not dllexported on Windows, so the constructor
@@ -43,15 +47,15 @@ MotionState::MotionState(SceneGraph::AbstractBasicObject3D<btScalar>& object, Sc
 MotionState::~MotionState() = default;
 
 void MotionState::getWorldTransform(btTransform& worldTrans) const {
-    const Matrix4 transformation = object().transformationMatrix();
+    const Math::Matrix4<btScalar> transformation = object().transformationMatrix();
     worldTrans.setOrigin(btVector3(transformation.translation()));
     worldTrans.setBasis(btMatrix3x3(transformation.rotationScaling()));
 }
 
 void MotionState::setWorldTransform(const btTransform& worldTrans) {
-    const Vector3 position = Vector3{worldTrans.getOrigin()};
-    const Vector3 axis = Vector3{worldTrans.getRotation().getAxis()};
-    const Float rotation = worldTrans.getRotation().getAngle();
+    const auto position = Math::Vector3<btScalar>{worldTrans.getOrigin()};
+    const auto axis = Math::Vector3<btScalar>{worldTrans.getRotation().getAxis()};
+    const auto rotation = Math::Rad<btScalar>{worldTrans.getRotation().getAngle()};
 
     /* Bullet sometimes reports NaNs for all the parameters and nobody is sure
        why: https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=12080. The body
@@ -66,7 +70,7 @@ void MotionState::setWorldTransform(const btTransform& worldTrans) {
 
     /** @todo Verify that all objects have common parent */
     _transformation.resetTransformation()
-        .rotate(Rad{rotation}, axis.normalized())
+        .rotate(rotation, axis.normalized())
         .translate(position);
 }
 

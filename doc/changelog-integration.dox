@@ -2,7 +2,7 @@
     This file is part of Magnum.
 
     Copyright © 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
-                2020 Vladimír Vondruš <mosra@centrum.cz>
+                2020, 2021 Vladimír Vondruš <mosra@centrum.cz>
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -38,6 +38,29 @@ namespace Magnum {
     @ref Corrade::Containers::StridedArrayView "Containers::StridedArrayView"
     using @ref EigenIntegration::arrayCast() (see [mosra/magnum-integration#74](https://github.com/mosra/magnum-integration/pull/74))
 
+@subsection changelog-integration-latest-changes Changes and improvements
+
+-   @ref BulletIntegration now supports Bullet compiled for double precision as
+    well
+-   Made it possible to override and call
+    @ref BulletIntegration::MotionState::getWorldTransform() /
+    @ref BulletIntegration::MotionState::setWorldTransform() from user code
+
+@subsection changelog-integration-latest-buildsystem Build system
+
+-   Updated `FindImGui.cmake` to optionally include the new `imgui_tables.cpp`
+    source present in latest versions (see [mosra/magnum-integration#78](https://github.com/mosra/magnum-integration/pull/78))
+-   Linux, Emscripten and macOS builds were migrated from Travis to Circle CI
+-   `FindBullet.cmake` now attemps to discover presence of the
+    `BT_USE_DOUBLE_PRECISION` preprocessor macro on both system-wide and
+    subproject workflow and adds it to the imported target to prevent linker
+    errors
+-   The Homebrew package now uses `std_cmake_args` instead of hardcoded build
+    type and install prefix, which resolves certain build issues (see
+    [mosra/homebrew-magnum#6](https://github.com/mosra/homebrew-magnum/pull/6))
+-   On CMake 3.16 and newer, `FindMagnumIntegration.cmake` can provide
+    additional details if some component is not found
+
 @subsection changelog-integration-latest-compatibility Potential compatibility breakages, removed APIs
 
 -   Removed `BulletIntegration::DebugDraw::DebugMode`, `DebugModes`, `mode()`
@@ -51,6 +74,8 @@ namespace Magnum {
 
 -   Various improvements and clarifications (see
     [mosra/magnum-integration#75](https://github.com/mosra/magnum-integration/issues/75))
+-   Documented how to enable ImGui in Debian packages (see
+    [mosra/magnum-integration#73](https://github.com/mosra/magnum-integration/issues/73))
 
 @section changelog-integration-2020-06 2020.06
 
@@ -91,8 +116,9 @@ Released 2020-06-27, tagged as
     header is not included by any other header to avoid trigerring a full
     rebuild when Git commit changes. If Git is not found, only the first two
     defines are present.
--   @ref ImGuiIntegration now uses Magnum's own @ref Shaders::Flat2D instead of
-    a custom shader, which finally makes it work on GLES2 and WebGL 1
+-   @ref ImGuiIntegration now uses Magnum's own @cpp Shaders::Flat2D @ce
+    instead of a custom shader, which finally makes it work on GLES2 and WebGL
+    1
 
 @subsection changelog-integration-2020-06-buildsystem Build system
 
